@@ -1,8 +1,3 @@
-﻿// Alexandra Harvey
-// COP3502 - Spring 2019
-// al608050
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "KindredSpirits.h"
