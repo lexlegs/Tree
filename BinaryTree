@@ -132,22 +132,34 @@ int countNodes(node *a)
 }
 
 //helper function for kindredSpirits - preorder traversal
-void preorder(node *node)
+void preorder(Stack *pre, node *node)
 {
     if (node == NULL)
         return;
 
-    preorder(node->left);
-    preorder(node->right);
+    preorder(pre, node->left);
+    preorder(pre, node->right);
 
 }
 
 //helper function for kindredSpirits - postorder traversal
-void postorder(node *node)
+void postorder(Stack *post, node *node)
 {
-    postorder(node->left);
-    postorder(node->right);
+    postorder(post, node->left);
+    postorder(post, node->right);
 
+}
+
+//helper function for kindredSpirits - pops stacks to compare
+int kindredHelp(Stack *stack1, Stack *stack2)
+{
+    while (!isEmpty(stack1))
+    {
+        if (pop(stack1) != pop(stack2))
+            return 0;
+    }
+
+    return 1;
 }
 
 //determines whether the trees rooted at a and b are kindred spirits
@@ -159,9 +171,15 @@ int kindredSpirits(node *a, node *b)
         return 1;
 
     //call countNodes
+    if (countNodes(a) != countNodes(b))
+        return 0;
 
-    //compare preorder and postorder traversal with a and b
+    //compare pre and post by way of popping off stack
+    preorder(stack1, a);
+    postorder(stack2, b);
 
-    else
+    kindredHelp(stack1, stack2)
+
+        return 0;
 
 }
