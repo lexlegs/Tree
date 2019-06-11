@@ -109,21 +109,59 @@ int isReflection(node *a, node *b)
     return 1;
 }
 
-//determines whether the trees rooted at a and b are kidnred spirits
+//helper function to return the number of nodes in the tree
+//helps with kindredSpirits
+int countNodes(node *a)
+{
+    int count = 0;
+
+    if (a == NULL)
+        return count;
+
+    if (a->left != NULL)
+    {
+        count += countNodes(a->left);
+    }
+
+    if (a->right != NULL)
+    {
+        count += countNodes(a->right);
+    }
+
+    return count;
+}
+
+//helper function for kindredSpirits - preorder traversal
+void preorder(node *node)
+{
+    if (node == NULL)
+        return;
+
+    preorder(node->left);
+    preorder(node->right);
+
+}
+
+//helper function for kindredSpirits - postorder traversal
+void postorder(node *node)
+{
+    postorder(node->left);
+    postorder(node->right);
+
+}
+
+//determines whether the trees rooted at a and b are kindred spirits
 //worst-case runtime must be O(n) and must handle large trees
 //helper functions recommended - returns 1 if true, otherwise 0
 int kindredSpirits(node *a, node *b)
 {
+    if (a == NULL && b == NULL)
+        return 1;
 
-}
+    //call countNodes
 
+    //compare preorder and postorder traversal with a and b
 
-double difficultyRating(void)
-{
-    return 3.0;
-}
+    else
 
-double hoursSpent(void)
-{
-    return 6.5;
 }
