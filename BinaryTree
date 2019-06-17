@@ -8,6 +8,13 @@ node *makeReflection(node *root);
 
 int kindredSpirits(node *a, node *b);
 
+typdef struct Stack
+{
+    int *array;
+    int size;
+    int capacity;
+} Stack;
+
 //test case 08
 node *create_node(int data)
 {
@@ -132,26 +139,31 @@ int countNodes(node *a)
 }
 
 //helper function for kindredSpirits - preorder traversal
-void preorder(Stack *pre, node *node)
+void preorder(Stack *pre, node *root)
 {
-    if (node == NULL)
+    if (root == NULL)
         return;
 
-    preorder(pre, node->left);
-    preorder(pre, node->right);
+    push(pre, root->data);
+    preorder(pre, root->left);
+    preorder(pre, root->right);
 
 }
 
 //helper function for kindredSpirits - postorder traversal
-void postorder(Stack *post, node *node)
+void postorder(Stack *post, node *root)
 {
-    postorder(post, node->left);
-    postorder(post, node->right);
+    if (root == NULL)
+        return;
+
+    postorder(post, root->left);
+    postorder(post, root->right);
+    push(post, root->data);
 
 }
 
 //helper function for kindredSpirits - pops stacks to compare
-int kindredHelp(Stack *stack1, Stack *stack2)
+int stackCompare(Stack *stack1, Stack *stack2)
 {
     while (!isEmpty(stack1))
     {
@@ -162,11 +174,27 @@ int kindredHelp(Stack *stack1, Stack *stack2)
     return 1;
 }
 
+//helper function for kindredSpirits - destroys the stacks
+Stack *destroyStack(Stack *myStack)
+{
+    if (myStack == NULL)
+        return NULL;
+
+    free(myStack->array);
+    free(myStack);
+
+    return NULL;
+}
+
+
 //determines whether the trees rooted at a and b are kindred spirits
 //worst-case runtime must be O(n) and must handle large trees
 //helper functions recommended - returns 1 if true, otherwise 0
 int kindredSpirits(node *a, node *b)
 {
+    Stack *preStack(countNodes(a));
+    Stack *postStack(countNodes(b));
+
     if (a == NULL && b == NULL)
         return 1;
 
@@ -175,11 +203,18 @@ int kindredSpirits(node *a, node *b)
         return 0;
 
     //compare pre and post by way of popping off stack
-    preorder(stack1, a);
-    postorder(stack2, b);
+    preorder(preStack, a);
+    postorder(postStack, b);
 
-    kindredHelp(stack1, stack2)
+    if (stackCompare(stack1, stack2))
+    {
+        destroyStack(preStack);
+        destroyStack(postStack);
+        return 1;
+    }
 
-        return 0;
+    destroyStack(preStack);
+    destroyStack(postStack);
 
+    return 0;
 }
